@@ -9,6 +9,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
@@ -23,7 +27,7 @@ public class MainFrame extends javax.swing.JFrame {
    boolean marcado = false;
    String lastId;
    JCalendar calendario = new JCalendar();
-   
+   java.util.Date dataUtil = new java.util.Date();
    
     public MainFrame() {
         initComponents();
@@ -57,16 +61,6 @@ public class MainFrame extends javax.swing.JFrame {
         lblTipoPlano = new javax.swing.JLabel();
         txtTipoPlano = new javax.swing.JTextField();
         lblInicioPlano = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        txtInicioDia = new javax.swing.JTextField();
-        txtInicioMes = new javax.swing.JTextField();
-        txtInicioAno = new javax.swing.JTextField();
-        txtFimAno = new javax.swing.JTextField();
-        jLabel12 = new javax.swing.JLabel();
-        txtFimMes = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
-        txtFimDia = new javax.swing.JTextField();
         lblFimPlano = new javax.swing.JLabel();
         btnCadastrar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -76,6 +70,8 @@ public class MainFrame extends javax.swing.JFrame {
         btnDeletar = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
+        dataInicio = new com.toedter.calendar.JDateChooser();
+        dataFim = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Cadastrar Alunos\n");
@@ -141,31 +137,6 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         lblInicioPlano.setText("Inicio do plano");
-
-        jLabel10.setText("/");
-
-        jLabel11.setText("/");
-
-        txtInicioDia.setText("Dia");
-
-        txtInicioMes.setText("Mes");
-
-        txtInicioAno.setText("Ano");
-
-        txtFimAno.setText("Ano");
-
-        jLabel12.setText("/");
-
-        txtFimMes.setText("Mes");
-
-        jLabel13.setText("/");
-
-        txtFimDia.setText("Dia");
-        txtFimDia.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFimDiaActionPerformed(evt);
-            }
-        });
 
         lblFimPlano.setText("Fim do plano");
 
@@ -260,49 +231,34 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(lblTipoPlano, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtTipoPlano, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblValor)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtvalor))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(lblTel)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(txtTel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel6)
-                                    .addGap(27, 27, 27)
-                                    .addComponent(txtCep, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(lblTel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtTel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel6)
+                                        .addGap(27, 27, 27)
+                                        .addComponent(txtCep, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(83, 83, 83))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(lblFimPlano)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(dataFim, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                         .addComponent(lblInicioPlano)
-                                        .addComponent(lblFimPlano))
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                            .addGap(9, 9, 9)
-                                            .addComponent(txtFimDia, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(9, 9, 9)
-                                            .addComponent(jLabel13)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(txtFimMes, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(jLabel12)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(txtFimAno, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addComponent(txtInicioDia, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(jLabel10)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(txtInicioMes, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(jLabel11)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(txtInicioAno, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(dataInicio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(lblTipoPlano, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(txtTipoPlano, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(lblValor)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtvalor)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -355,23 +311,15 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(txtTipoPlano, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblValor, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtvalor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(23, 23, 23)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(29, 29, 29)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblInicioPlano, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtInicioDia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10)
-                    .addComponent(txtInicioMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel11)
-                    .addComponent(txtInicioAno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
-                    .addComponent(txtFimDia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtFimMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12)
-                    .addComponent(txtFimAno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblFimPlano))
-                .addGap(26, 26, 26)
+                    .addComponent(dataInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblFimPlano)
+                    .addComponent(dataFim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCadastrar)
                     .addComponent(btnDeletar)
@@ -415,8 +363,6 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        // TODO add your handling code here:
-        // TODO add your handling code here:
 
         if(btnEditar.getText().equals("Salvar")){
             String sql = "UPDATE pessoa SET nome = ?, telefone = ? where id_nome = ?;";
@@ -468,23 +414,32 @@ public class MainFrame extends javax.swing.JFrame {
                 Object fimPlan = jTable1.getValueAt(index, 10);;
 
                 if(tipoPlano == null && valor == null){
-
+                    
+                    SimpleDateFormat formatador = new SimpleDateFormat("yyyy/MM/dd");
+                    String dataFormatada1 = formatador.format(dataInicio.getDate());
+                    String dataFormatada2 = formatador.format(dataFim.getDate());
+                    
                     String sqlPlano = "insert into plano (tipo,valor,inicio,fim,pessoa_id_nome) values (?, ?, ?, ?, ?);";
                     PreparedStatement stmtEnd = getConnection.conectarMysql().prepareStatement(sqlPlano);
                     stmtEnd.setString(1,txtTipoPlano.getText());
                     stmtEnd.setString(2,txtvalor.getText());
-                    stmtEnd.setString(3,txtInicioAno.getText()+"/"+txtInicioMes.getText()+"/"+txtInicioDia.getText());
-                    stmtEnd.setString(4,txtFimAno.getText()+"/"+txtFimMes.getText()+"/"+txtFimDia.getText());
+                    stmtEnd.setString(3,dataFormatada1);
+                    stmtEnd.setString(4,dataFormatada2);
                     stmtEnd.setInt(5,Integer.parseInt(id.toString()));
                     stmtEnd.execute();
 
                 }else{
+                    SimpleDateFormat formatador = new SimpleDateFormat("yyyy/MM/dd");
+                    String dataFormatada1 = formatador.format(dataInicio.getDate());
+                    String dataFormatada2 = formatador.format(dataFim.getDate());
+                    
+                   
                     String sqPlanEdit = "update plano set tipo = ?, valor = ?, inicio = ?, fim = ?, pessoa_id_nome = ? where pessoa_id_nome = ?";
                     PreparedStatement stmt2 = getConnection.conectarMysql().prepareStatement(sqPlanEdit);
                     stmt2.setString(1, txtTipoPlano.getText());
                     stmt2.setString(2, txtvalor.getText());
-                    stmt2.setString(3,txtInicioAno.getText()+"/"+txtInicioMes.getText()+"/"+txtInicioDia.getText());
-                    stmt2.setString(4,txtFimAno.getText()+"/"+txtFimMes.getText()+"/"+txtFimDia.getText());
+                    stmt2.setString(3,dataFormatada1);
+                    stmt2.setString(4,dataFormatada2);
                     stmt2.setInt(5, Integer.parseInt(id.toString()));
                     stmt2.setInt(6, Integer.parseInt(id.toString()));
                     stmt2.execute();
@@ -585,21 +540,18 @@ public class MainFrame extends javax.swing.JFrame {
         txtBairro.setText(bairro.toString());
         txtTipoPlano.setText(tipoPlano.toString());
         txtvalor.setText(valor.toString());
+       
+       
+       
+      
+       
+        //dataFim.setDate((Date) fimPlan);
+          //System.out.println(dataFormatada);
+          
+          
+        
 
-        if(inicioPlan != null){
-            String textoSeparado1[] = inicioPlan.toString().split("-");
-            txtInicioAno.setText(""+textoSeparado1[0]);
-            txtInicioMes.setText(""+textoSeparado1[1]);
-            txtInicioDia.setText(""+textoSeparado1[2]);
-        }
-
-        if(fimPlan != null){
-            String textoSeparado2[] = fimPlan.toString().split("-");
-            txtFimAno.setText(""+textoSeparado2[0]);
-            txtFimMes.setText(""+textoSeparado2[1]);
-            txtFimDia.setText(""+textoSeparado2[2]);
-        }
-
+        
         if(btnEditar.getText().equals("Salvar")){
             btnCadastrar.setEnabled(false);
             btnCadastrar.setVisible(false);
@@ -620,12 +572,7 @@ public class MainFrame extends javax.swing.JFrame {
                 cep = txtCep.getText();
                 bairro = txtBairro.getText();
                 tipoPlano = txtTipoPlano.getText();
-                DiaInicio = txtInicioDia.getText();
-                MesInicio = txtInicioMes.getText();
-                AnoInicio = txtInicioAno.getText();
-                DiaFim = txtFimDia.getText();
-                MesFim = txtFimMes.getText();
-                AnoFim = txtFimAno.getText();
+                
 
                 getConnection c = new getConnection();
                 String sql = "insert into pessoa values (default,?,?);";
@@ -655,16 +602,27 @@ public class MainFrame extends javax.swing.JFrame {
 
                     String sqlPlano = "insert into plano (tipo,valor,inicio,fim,pessoa_id_nome) values (?, ?, ?, ?, ?);";
                     PreparedStatement stmtPlano = c.conectarMysql().prepareStatement(sqlPlano);
+                    
                     if(RadioCadastrar.isSelected()){
 
-                        String dataInicio = AnoInicio+"/"+MesInicio+"/"+DiaInicio;
-                        String dataFim = AnoFim+"/"+MesFim+"/"+DiaFim;
-                        stmtPlano.setString(1,txtTipoPlano.getText());
-                        stmtPlano.setString(2,txtvalor.getText());
-                        stmtPlano.setString(3,dataInicio);
-                        stmtPlano.setString(4,dataFim);
-                        stmtPlano.setInt(5,Integer.parseInt(lastId));
-                        stmtPlano.execute();
+                    SimpleDateFormat sd = new SimpleDateFormat();
+                        
+                        try {
+                                SimpleDateFormat formatador = new SimpleDateFormat("yyyy/MM/dd");
+                                String dataFormatada1 = formatador.format(dataInicio.getDate());
+                                String dataFormatada2 = formatador.format(dataFim.getDate());
+                                
+                                stmtPlano.setString(1,txtTipoPlano.getText());
+                                stmtPlano.setString(2,txtvalor.getText());
+                                stmtPlano.setString(3,dataFormatada1);
+                                stmtPlano.setString(4,dataFormatada2);
+                                stmtPlano.setInt(5,Integer.parseInt(lastId));
+                                stmtPlano.execute();
+                        } catch (Exception e) {
+                                
+                        }
+
+                        
                     }
 
                     stmt.close();
@@ -717,10 +675,6 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNomeActionPerformed
 
-    private void txtFimDiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFimDiaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFimDiaActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -760,21 +714,13 @@ public class MainFrame extends javax.swing.JFrame {
     public void acaoRadioButton (){
         if(RadioCadastrar.isSelected()){
             txtTipoPlano.setEnabled(true);
-            txtInicioDia.setEnabled(true);
-            txtInicioMes.setEnabled(true);
-            txtInicioAno.setEnabled(true);
-            txtFimDia.setEnabled(true);
-            txtFimMes.setEnabled(true);
-            txtFimAno.setEnabled(true);
+            dataInicio.setEnabled(true);
+            dataFim.setEnabled(true);
             txtvalor.setEnabled(true);
         }else{
             txtTipoPlano.setEnabled(false);
-            txtInicioDia.setEnabled(false);
-            txtInicioMes.setEnabled(false);
-            txtInicioAno.setEnabled(false);
-            txtFimDia.setEnabled(false);
-            txtFimMes.setEnabled(false);
-            txtFimAno.setEnabled(false);
+            dataInicio.setEnabled(false);
+            dataFim.setEnabled(false);
             txtvalor.setEnabled(false);
         }
         }
@@ -812,16 +758,26 @@ public class MainFrame extends javax.swing.JFrame {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    
+    protected String converteData(java.util.Date dtData){
+        SimpleDateFormat formatBra;   
+        formatBra = new SimpleDateFormat("yyyy/MM/dd");
+        try {
+           java.util.Date newData = formatBra.parse(dtData.toString());
+           return (formatBra.format(newData));
+        } catch (ParseException Ex) {
+           return "Erro na conversão da data";
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton RadioCadastrar;
     private javax.swing.JButton btnCadastrar;
     private javax.swing.JButton btnDeletar;
     private javax.swing.JButton btnEditar;
+    private com.toedter.calendar.JDateChooser dataFim;
+    private com.toedter.calendar.JDateChooser dataInicio;
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
@@ -837,12 +793,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel lblValor;
     private javax.swing.JTextField txtBairro;
     private javax.swing.JTextField txtCep;
-    private javax.swing.JTextField txtFimAno;
-    private javax.swing.JTextField txtFimDia;
-    private javax.swing.JTextField txtFimMes;
-    private javax.swing.JTextField txtInicioAno;
-    private javax.swing.JTextField txtInicioDia;
-    private javax.swing.JTextField txtInicioMes;
     private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtNumero;
     private javax.swing.JTextField txtRua;
