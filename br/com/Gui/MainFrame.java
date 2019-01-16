@@ -69,7 +69,6 @@ public class MainFrame extends javax.swing.JFrame {
         btnDeletar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1024, 728));
         addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 formFocusGained(evt);
@@ -175,10 +174,10 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
         jTable1.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 jTable1InputMethodTextChanged(evt);
+            }
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
         jTable1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
@@ -202,7 +201,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        btnDeletar.setText("Deletar Registro");
+        btnDeletar.setText("Deletar");
         btnDeletar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeletarActionPerformed(evt);
@@ -385,10 +384,6 @@ public class MainFrame extends javax.swing.JFrame {
         
         
         acaoRadioButton();
-        ////
-        
-        
-        
         mostrarDados();
         
     }//GEN-LAST:event_formWindowOpened
@@ -423,13 +418,13 @@ public class MainFrame extends javax.swing.JFrame {
         txtNome.setText(nome.toString());
         txtTel.setText(telefone.toString());
         txtRua.setText(rua.toString());
-        txtNumero.setText(rua.toString());
+        txtNumero.setText(numero.toString());
         txtCep.setText(cep.toString());
         txtBairro.setText(bairro.toString());
         txtTipoPlano.setText(tipoPlano.toString());
         txtvalor.setText(valor.toString());
 
-        //String textoSeparado1[] = inicioPlan.toString().split("-");
+       
         
         if(inicioPlan != null){
         String textoSeparado1[] = inicioPlan.toString().split("-");
@@ -449,78 +444,87 @@ public class MainFrame extends javax.swing.JFrame {
         if(btnEditar.getText().equals("Salvar")){
             btnCadastrar.setEnabled(false);
             btnCadastrar.setVisible(false);
-            System.out.println("" + txtNome.getText() + txtTel.getText());
-           
         }
         
 
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-        //vars
-        nome = txtNome.getText();
-        telefone = txtTel.getText();
-        rua = txtRua.getText();
-        numero = txtNumero.getText();
-        cep = txtCep.getText();
-        bairro = txtBairro.getText();
-        tipoPlano = txtTipoPlano.getText();
-        DiaInicio = txtInicioDia.getText();
-        MesInicio = txtInicioMes.getText();
-        AnoInicio = txtInicioAno.getText();
-        DiaFim = txtFimDia.getText();
-        MesFim = txtFimMes.getText();
-        AnoFim = txtFimAno.getText();
+        
+        if(btnCadastrar.getText().equals("Salvar")){ //vars
+            nome = txtNome.getText();
+            telefone = txtTel.getText();
+            rua = txtRua.getText();
+            numero = txtNumero.getText();
+            cep = txtCep.getText();
+            bairro = txtBairro.getText();
+            tipoPlano = txtTipoPlano.getText();
+            DiaInicio = txtInicioDia.getText();
+            MesInicio = txtInicioMes.getText();
+            AnoInicio = txtInicioAno.getText();
+            DiaFim = txtFimDia.getText();
+            MesFim = txtFimMes.getText();
+            AnoFim = txtFimAno.getText();
 
-        getConnection c = new getConnection();
-        String sql = "insert into pessoa values (default,?,?);";
+            getConnection c = new getConnection();
+            String sql = "insert into pessoa values (default,?,?);";
 
-        try {
-            PreparedStatement stmt = c.conectarMysql().prepareStatement(sql);
-            stmt.setString(1,nome);
-            stmt.setString(2,telefone);
-            stmt.execute();
+            try {
+                PreparedStatement stmt = c.conectarMysql().prepareStatement(sql);
+                stmt.setString(1,nome);
+                stmt.setString(2,telefone);
+                stmt.execute();
 
-            Statement stmt2;
-            stmt2 = c.conectarMysql().createStatement();
-            String sqlLast = "SELECT LAST_INSERT_ID() as id;";
-            ResultSet rs = stmt.executeQuery(sqlLast);
-            while (rs.next()) {
-                lastId = rs.getString("id");
+                Statement stmt2;
+                stmt2 = c.conectarMysql().createStatement();
+                String sqlLast = "SELECT LAST_INSERT_ID() as id;";
+                ResultSet rs = stmt.executeQuery(sqlLast);
+                while (rs.next()) {
+                    lastId = rs.getString("id");
+                }
+
+                String sqlEnd = "insert into endereco (rua,numero,cep,bairro,pessoa_id_nome) values (?, ?, ?, ?, ?);";
+                PreparedStatement stmtEnd = c.conectarMysql().prepareStatement(sqlEnd);
+                stmtEnd.setString(1,rua);
+                stmtEnd.setString(2,numero);
+                stmtEnd.setString(3,cep);
+                stmtEnd.setString(4,bairro);
+                stmtEnd.setInt(5,Integer.parseInt(lastId));
+                stmtEnd.execute();
+
+                String sqlPlano = "insert into plano (tipo,valor,inicio,fim,pessoa_id_nome) values (?, ?, ?, ?, ?);";
+                PreparedStatement stmtPlano = c.conectarMysql().prepareStatement(sqlPlano);
+                if(RadioCadastrar.isSelected()){
+
+                    String dataInicio = AnoInicio+"/"+MesInicio+"/"+DiaInicio;
+                    String dataFim = AnoFim+"/"+MesFim+"/"+DiaFim;
+                    stmtPlano.setString(1,txtTipoPlano.getText());
+                    stmtPlano.setString(2,txtvalor.getText());
+                    stmtPlano.setString(3,dataInicio);
+                    stmtPlano.setString(4,dataFim);
+                    stmtPlano.setInt(5,Integer.parseInt(lastId));
+                    stmtPlano.execute();
+                }
+
+                stmt.close();
+                stmt2.close();
+                stmtEnd.close();;
+                stmtPlano.close();
+
+                mostrarDados();
+                btnCadastrar.setText("Cadastrar Novo Aluno");
+                btnEditar.setVisible(true);
+                btnDeletar.setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-            String sqlEnd = "insert into endereco (rua,numero,cep,bairro,pessoa_id_nome) values (?, ?, ?, ?, ?);";
-            PreparedStatement stmtEnd = c.conectarMysql().prepareStatement(sqlEnd);
-            stmtEnd.setString(1,rua);
-            stmtEnd.setString(2,numero);
-            stmtEnd.setString(3,cep);
-            stmtEnd.setString(4,bairro);
-            stmtEnd.setInt(5,Integer.parseInt(lastId));
-            stmtEnd.execute();
-
-            String sqlPlano = "insert into plano (tipo,valor,inicio,fim,pessoa_id_nome) values (?, ?, ?, ?, ?);";
-            PreparedStatement stmtPlano = c.conectarMysql().prepareStatement(sqlPlano);
-            if(RadioCadastrar.isSelected()){
-
-                String dataInicio = AnoInicio+"/"+MesInicio+"/"+DiaInicio;
-                String dataFim = AnoFim+"/"+MesFim+"/"+DiaFim;
-                stmtPlano.setString(1,txtTipoPlano.getText());
-                stmtPlano.setString(2,txtvalor.getText());
-                stmtPlano.setString(3,dataInicio);
-                stmtPlano.setString(4,dataFim);
-                stmtPlano.setInt(5,Integer.parseInt(lastId));
-                stmtPlano.execute();
-            }
-
-            stmt.close();
-            stmt2.close();
-            stmtEnd.close();;
-            stmtPlano.close();
-
+        }else{
+            btnEditar.setVisible(false);
+            btnDeletar.setVisible(false);
+            btnCadastrar.setText("Salvar");
             mostrarDados();
-        } catch (SQLException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void txtTipoPlanoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTipoPlanoActionPerformed
@@ -552,7 +556,6 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         if(btnEditar.getText().equals("Salvar")){
-
             String sql = "UPDATE pessoa SET nome = ?, telefone = ? where id_nome = ?;";
             String sql2 = "update endereco set rua = ?, numero = ?, cep = ?, bairro = ?, pessoa_id_nome = ? where pessoa_id_nome = ?";
             String sql3 = "UPDATE pessoa SET nome = ?, telefone = ? where id_nome = ? ";
@@ -596,7 +599,34 @@ public class MainFrame extends javax.swing.JFrame {
                     stmt2.close();
                 }
                 
+                Object tipoPlano = ""+jTable1.getValueAt(index, 7);
+                Object valor = ""+jTable1.getValueAt(index, 8);
+                Object inicioPlan = jTable1.getValueAt(index, 9);
+                Object fimPlan = jTable1.getValueAt(index, 10);;
                 
+                if(tipoPlano == null && valor == null){
+                    
+                    String sqlPlano = "insert into plano (tipo,valor,inicio,fim,pessoa_id_nome) values (?, ?, ?, ?, ?);";
+                    PreparedStatement stmtEnd = getConnection.conectarMysql().prepareStatement(sqlPlano);
+                    stmtEnd.setString(1,txtTipoPlano.getText());
+                    stmtEnd.setString(2,txtvalor.getText());
+                    stmtEnd.setString(3,txtInicioAno.getText()+"/"+txtInicioMes.getText()+"/"+txtInicioDia);
+                    stmtEnd.setString(4,txtFimAno.getText()+"/"+txtFimMes.getText()+"/"+txtFimDia);
+                    stmtEnd.setInt(5,Integer.parseInt(id.toString()));
+                    stmtEnd.execute();
+                    
+                }else{
+                    String sqPlanEdit = "update plano set tipo = ?, valor = ?, inicio = ?, fim = ?, pessoa_id_nome = ? where pessoa_id_nome = ?";
+                    PreparedStatement stmt2 = getConnection.conectarMysql().prepareStatement(sqPlanEdit);
+                    stmt2.setString(1, txtTipoPlano.getText());
+                    stmt2.setString(2, txtvalor.getText());
+                    stmt2.setString(3,txtInicioAno.getText()+"/"+txtInicioMes.getText()+"/"+txtInicioDia);
+                    stmt2.setString(4,txtFimAno.getText()+"/"+txtFimMes.getText()+"/"+txtFimDia);
+                    stmt2.setInt(5, Integer.parseInt(id.toString()));
+                    stmt2.setInt(6, Integer.parseInt(id.toString()));
+                    stmt2.execute();
+                    stmt2.close();
+                }
              
                 
                 btnEditar.setText("Editar");
@@ -616,6 +646,31 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void btnDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeletarActionPerformed
         // TODO add your handling code here:
+        if(btnDeletar.getText().equals("Confirmar")){
+            
+           int index = jTable1.getSelectedRow();
+           String sql = "delete from pessoa where id_nome = "+jTable1.getValueAt(index, 0)+";";
+           
+            try {
+                PreparedStatement stmt = getConnection.conectarMysql().prepareStatement(sql);
+                stmt.executeUpdate(sql);
+		stmt.close();
+                mostrarDados();
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+            btnCadastrar.setVisible(true);
+            btnEditar.setVisible(true);
+            btnDeletar.setText("Deletar");
+        }else{
+            btnCadastrar.setVisible(false);
+            btnEditar.setVisible(false);
+            btnDeletar.setText("Confirmar");
+            
+        }
     }//GEN-LAST:event_btnDeletarActionPerformed
 
     /**
@@ -678,6 +733,7 @@ public class MainFrame extends javax.swing.JFrame {
     
     public void mostrarDados(){
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+              
        
         model.setNumRows(0);
         
