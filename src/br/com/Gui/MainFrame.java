@@ -9,16 +9,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.EventListener;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
-import javax.swing.text.MaskFormatter;
 
 public class MainFrame extends javax.swing.JFrame {
 
@@ -171,7 +168,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        cbMostrar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mostrar Todos", "Mostrar Pendentes" }));
+        cbMostrar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mostrar Todos", "Mostrar Pendentes a 3 meses", "Mostrar Pendentes a 6 meses", "Mostrar Todos Pendentes" }));
         cbMostrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbMostrarActionPerformed(evt);
@@ -188,60 +185,47 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lblRua)
-                        .addGap(28, 28, 28)
-                        .addComponent(txtRua)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(jLabel7))
-                            .addComponent(lblNumero))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtBairro, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                            .addComponent(txtNumero))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtTipoPlano, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(RadioCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lblTel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtTel, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel6)
-                                    .addGap(27, 27, 27)
-                                    .addComponent(txtCep, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(476, 476, 476))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(lblFimPlano)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(dataFim, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(lblInicioPlano)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(dataInicio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                                .addComponent(lblFimPlano)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(dataFim, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                                .addComponent(lblInicioPlano)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(dataInicio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(lblTipoPlano, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(txtvalor, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                            .addComponent(lblTipoPlano, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addComponent(txtvalor, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGap(376, 376, 376)))
+                                            .addComponent(lblRua)
+                                            .addGap(28, 28, 28)
+                                            .addComponent(txtRua))
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addComponent(jLabel6)
+                                            .addGap(27, 27, 27)
+                                            .addComponent(txtCep, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGap(93, 93, 93)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addGap(6, 6, 6)
+                                            .addComponent(jLabel7))
+                                        .addComponent(lblNumero))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(txtBairro, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                                        .addComponent(txtNumero))))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(lblNome)
                                 .addGap(18, 18, 18)
                                 .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(189, 189, 189)
-                                .addComponent(cbMostrar, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(cbMostrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 432, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -251,7 +235,17 @@ public class MainFrame extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(lblValor))
-                        .addGap(0, 165, Short.MAX_VALUE))))
+                        .addGap(0, 218, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(txtTipoPlano, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(RadioCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(lblTel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtTel, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addComponent(jScrollPane1)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(392, 392, 392)
@@ -819,16 +813,151 @@ public class MainFrame extends javax.swing.JFrame {
         }
     };
     
+    public void mostrarPenTresMeses(){
+        ModeloTabela modelT = new ModeloTabela();
+        jTable1.setModel(modelT);
+        
+        
+        //SimpleDateFormat formatador = new SimpleDateFormat("yyyy/MM/dd");
+        //String dataFormatada1 = formatador.format(dataAtual);
+        
+        Date dataAtual = new Date();
+        Calendar calendarData = Calendar.getInstance();
+        calendarData.setTime(dataAtual);
+        int numeroDiasParaSubtrair = -90;
+        calendarData.add(Calendar.DATE,numeroDiasParaSubtrair);
+        Date dataTresMeses = calendarData.getTime();
+        
+        SimpleDateFormat formatador = new SimpleDateFormat("yyyy/MM/dd");
+        String dataTresMesesFormatada = formatador.format(dataTresMeses);
+        String dataAtualFormatada = formatador.format(dataAtual);
+        
+        try {
+            Statement stmt;
+            stmt = getConnection.conectarMysql().createStatement();
+            String sql = "select id_nome, nome, telefone, rua, numero, cep, "
+                    + "bairro, tipo, valor, inicio, fim from plano inner join "
+                    + "pessoa on pessoa.id_nome = pessoa_id_nome join endereco "
+                    + "on pessoa.id_nome = endereco.pessoa_id_nome "
+                    + "where fim > '"+dataTresMesesFormatada+"' and fim < '"+dataAtualFormatada+"';";
+            
+            
+            ResultSet rs = stmt.executeQuery(sql);
+            
+                while (rs.next()) {
+                    String id = rs.getString("id_nome");
+                    String nome = rs.getString("nome");
+                    String telefone = rs.getString("telefone");
+                    String rua = rs.getString("rua");
+                    String numero = rs.getString("numero");
+                    String cep = rs.getString("cep");
+                    String bairro = rs.getString("bairro");
+                    String tipo = rs.getString("tipo");
+                    String valor = rs.getString("valor");
+                    String inicio = rs.getString("inicio");
+                    String fim = rs.getString("fim");
+                    
+                    Dados dados = new Dados();
+                    
+                    dados.setId(id);
+                    dados.setNome(nome);
+                    dados.setTelefone(telefone);
+                    dados.setRua(rua);
+                    dados.setNumero(numero);
+                    dados.setCep(cep);
+                    dados.setBairro(bairro);
+                    dados.setPlano(tipo);
+                    dados.setValor(valor);
+                    dados.setInicio(inicio);
+                    dados.setFim(fim);
+                    
+                    
+                    modelT.addRow(dados);
+                }
+        } catch (SQLException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    };
+    
+    public void mostrarPenSeisMeses(){
+        ModeloTabela modelT = new ModeloTabela();
+        jTable1.setModel(modelT);
+        
+        
+        //SimpleDateFormat formatador = new SimpleDateFormat("yyyy/MM/dd");
+        //String dataFormatada1 = formatador.format(dataAtual);
+        
+        Date dataAtual = new Date();
+        Calendar calendarData = Calendar.getInstance();
+        calendarData.setTime(dataAtual);
+        int numeroDiasParaSubtrair = -180;
+        calendarData.add(Calendar.DATE,numeroDiasParaSubtrair);
+        Date dataTresMeses = calendarData.getTime();
+        
+        SimpleDateFormat formatador = new SimpleDateFormat("yyyy/MM/dd");
+        String dataTresMesesFormatada = formatador.format(dataTresMeses);
+        String dataAtualFormatada = formatador.format(dataAtual);
+        
+        try {
+            Statement stmt;
+            stmt = getConnection.conectarMysql().createStatement();
+            String sql = "select id_nome, nome, telefone, rua, numero, cep, "
+                    + "bairro, tipo, valor, inicio, fim from plano inner join "
+                    + "pessoa on pessoa.id_nome = pessoa_id_nome join endereco "
+                    + "on pessoa.id_nome = endereco.pessoa_id_nome "
+                    + "where fim > '"+dataTresMesesFormatada+"' and fim < '"+dataAtualFormatada+"';";
+            
+            
+            ResultSet rs = stmt.executeQuery(sql);
+            
+                while (rs.next()) {
+                    String id = rs.getString("id_nome");
+                    String nome = rs.getString("nome");
+                    String telefone = rs.getString("telefone");
+                    String rua = rs.getString("rua");
+                    String numero = rs.getString("numero");
+                    String cep = rs.getString("cep");
+                    String bairro = rs.getString("bairro");
+                    String tipo = rs.getString("tipo");
+                    String valor = rs.getString("valor");
+                    String inicio = rs.getString("inicio");
+                    String fim = rs.getString("fim");
+                    
+                    Dados dados = new Dados();
+                    
+                    dados.setId(id);
+                    dados.setNome(nome);
+                    dados.setTelefone(telefone);
+                    dados.setRua(rua);
+                    dados.setNumero(numero);
+                    dados.setCep(cep);
+                    dados.setBairro(bairro);
+                    dados.setPlano(tipo);
+                    dados.setValor(valor);
+                    dados.setInicio(inicio);
+                    dados.setFim(fim);
+                    
+                    
+                    modelT.addRow(dados);
+                }
+        } catch (SQLException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    };
+    
     
     public void detectarDados(){
-       String tipoDados = cbMostrar.getSelectedItem().toString();
+       int tipoDados = cbMostrar.getSelectedIndex();
 
        switch(tipoDados){
-           case "Mostrar Todos" : mostrarDados();
+           case 0 : mostrarDados();
            break;
-           case "Mostrar Pendentes" : mostrarPendentes();
+           case 1 : mostrarPenTresMeses();
            break;
-          default: mostrarDados();
+           case 2 : mostrarPenSeisMeses();
+           break;
+           case 3: mostrarPendentes();
+           break;
        }
        
     };
